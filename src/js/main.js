@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       return;
     }
 
-    //crear tarea con clave texto y valor
+    //se crea el objeto tarea
     const tarea = {texto: textoTarea}
     pintarTareaDOM(tarea);
 
@@ -30,24 +30,37 @@ document.addEventListener("DOMContentLoaded",()=>{
   function pintarTareaDOM(tarea) {
     const elementli = document.createElement("li");
     elementli.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
-    elementli.textContent = tarea.texto;
 
-    //boton eliminar
+    const spanTexto = document.createElement("span");
+    spanTexto.textContent = tarea.texto.charAt(0).toUpperCase() + tarea.texto.slice(1).toLowerCase();
+    const divBotones = document.createElement("div");
+    divBotones.classList.add("d-flex", "gap-2","align-items-center"); 
+
+    // Botón eliminar
     const botonEliminar = document.createElement("button");
     botonEliminar.textContent = "❌";
-    botonEliminar.classList.add("btn","btn-sm");
-    botonEliminar.addEventListener("click",()=>{
+    botonEliminar.classList.add("btn", "btn-sm");
+    botonEliminar.addEventListener("click", () => {
       elementli.remove();
     });
-    //añadimos el boton al elemento
-    elementli.appendChild(botonEliminar);
+
+    // Para la tarea completada
+    const botonMarcar = document.createElement("input");
+    botonMarcar.type = "radio";
+    botonMarcar.classList.add("form-check-input");
+    botonMarcar.addEventListener("change", () => {
+      spanTexto.classList.toggle("text-decoration-line-through");//tacha el texto
+    });
+
+    divBotones.appendChild(botonMarcar);
+    divBotones.appendChild(botonEliminar);
+    elementli.appendChild(spanTexto); 
+    elementli.appendChild(divBotones);
     //pintamos en el ul el li
     listaTareas.appendChild(elementli);
-
   }
 
   //boton para agregar tareas
   botonAgregar.addEventListener("click",agregarTarea );
-
 
 })
