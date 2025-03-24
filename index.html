@@ -4,12 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <link rel="stylesheet" href="public/style.css">
+    <title>Lista de tareas</title>
 
   </head>
   <body>
-    <button class="btn btn-primary">Hola Bootstrap</button>
-    <div id="app"></div>
+    <div class="container">
+      <div class="ctareas">
+        <h1 class="text-center mt-2">Lista de tareas</h1>
+        <div class="task-form d-flex mt-3">
+          <input type="text" id="nueva-tarea" class="form-control" placeholder="Escribe una tarea">
+          <button id="agregar-tarea" class="btn btn-primary ms-2">Agregar</button>
+        </div>
+      </div>
+
+    <ul id="lista-tareas" class="list-group mt-3"></ul>
+
+
+    </div>
+
     <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>
