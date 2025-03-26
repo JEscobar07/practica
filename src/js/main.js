@@ -49,7 +49,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     botonMarcar.type = "radio";
     botonMarcar.classList.add("form-check-input");
     botonMarcar.addEventListener("change", () => {
-      spanTexto.classList.toggle("text-decoration-line-through");//tacha el texto
+      // Agregar/quitar las clases para cambiar el estilo
+      spanTexto.classList.toggle("text-decoration-line-through");
+      elementli.classList.toggle("bg-success");
+      elementli.classList.toggle("text-white");
     });
 
     divBotones.appendChild(botonMarcar);
