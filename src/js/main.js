@@ -10,7 +10,26 @@ document.addEventListener("DOMContentLoaded",()=>{
   const botonAgregar = document.getElementById("agregar-tarea");
   const listaTareas = document.getElementById("lista-tareas");
 
-  //agregar tarea
+  // 1. Cargar tareas guardadas al iniciar
+  const tareasGuardadas = JSON.parse(localStorage.getItem('tareas')) || [];
+  tareasGuardadas.forEach(tarea => pintarTareaDOM(tarea));
+
+  // 2. Función para guardar todas las tareas actuales
+  function guardarTareasActuales() {
+    const tareasElements = listaTareas.querySelectorAll('li');
+    const tareas = [];
+    
+    tareasElements.forEach(element => {
+      tareas.push({
+        texto: element.querySelector('span').textContent,
+        completada: element.classList.contains('bg-success')
+      });
+    });
+    
+    localStorage.setItem('tareas', JSON.stringify(tareas));
+  }
+
+  //agregar tarea 
   function agregarTarea() {
     const textoTarea = inputTarea.value.trim()
     if (textoTarea === "") {
@@ -21,49 +40,60 @@ document.addEventListener("DOMContentLoaded",()=>{
     //se crea el objeto tarea
     const tarea = {texto: textoTarea}
     pintarTareaDOM(tarea);
+    guardarTareasActuales(); 
 
     inputTarea.value = "";
-
   }
 
-  //pintar tarea
+  //pintar tarea 
   function pintarTareaDOM(tarea) {
     const elementli = document.createElement("li");
     elementli.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
 
+    // Restaurar estado si es una tarea guardada
+    if (tarea.completada) {
+      elementli.classList.add("bg-success", "text-white");
+    }
+
     const spanTexto = document.createElement("span");
     spanTexto.textContent = tarea.texto.charAt(0).toUpperCase() + tarea.texto.slice(1).toLowerCase();
+    
+    // Restaurar estado del texto si es tarea guardada
+    if (tarea.completada) {
+      spanTexto.classList.add("text-decoration-line-through");
+    }
+
     const divBotones = document.createElement("div");
     divBotones.classList.add("d-flex", "gap-2","align-items-center"); 
 
-    // Botón eliminar
+    // Botón eliminar (solo agregamos guardado al eliminar)
     const botonEliminar = document.createElement("button");
     botonEliminar.textContent = "❌";
     botonEliminar.classList.add("btn", "btn-sm");
     botonEliminar.addEventListener("click", () => {
       elementli.remove();
+      guardarTareasActuales(); 
     });
 
     // Para la tarea completada
     const botonMarcar = document.createElement("input");
     botonMarcar.type = "radio";
     botonMarcar.classList.add("form-check-input");
+    botonMarcar.checked = tarea.completada || false;
     botonMarcar.addEventListener("change", () => {
-      // Agregar/quitar las clases para cambiar el estilo
       spanTexto.classList.toggle("text-decoration-line-through");
       elementli.classList.toggle("bg-success");
       elementli.classList.toggle("text-white");
+      guardarTareasActuales(); 
     });
 
     divBotones.appendChild(botonMarcar);
     divBotones.appendChild(botonEliminar);
     elementli.appendChild(spanTexto); 
     elementli.appendChild(divBotones);
-    //pintamos en el ul el li
     listaTareas.appendChild(elementli);
   }
 
-  //boton para agregar tareas
-  botonAgregar.addEventListener("click",agregarTarea );
-
+  //boton para agregar tareas 
+  botonAgregar.addEventListener("click",agregarTarea);
 })
